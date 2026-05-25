@@ -1,0 +1,46 @@
+[load] ./data/brfss_2024_clean.parquet
+  shape: (393676, 16)
+  weights: uniform (column _LLCPWT not found)
+
+[train] LogisticRegression via 5-fold CV
+  full-data AUROC: 0.6877
+
+[point] weighted point estimates (full data)
+  target aggregate rate (weighted mean(y)): 0.3649
+  [Unmitigated   ] acc=0.6610 DPD=0.1962 OCFviol(Linf)=0.3379 TPR_Black_NH=0.6035
+  [DP            ] acc=0.6529 DPD=0.0001 OCFviol(Linf)=0.2553 TPR_Black_NH=0.4849
+  [OCF           ] acc=0.6638 DPD=0.3176 OCFviol(Linf)=0.0001 TPR_Black_NH=0.6866
+  [EO            ] acc=0.6162 DPD=0.1118 OCFviol(Linf)=0.2672 TPR_Black_NH=0.7030
+
+[bootstrap] 1000 replicates, stratified by region
+  replicate 1/1000
+  replicate 100/1000
+  replicate 200/1000
+  replicate 300/1000
+  replicate 400/1000
+  replicate 500/1000
+  replicate 600/1000
+  replicate 700/1000
+  replicate 800/1000
+  replicate 900/1000
+  replicate 1000/1000
+
+[summary] 95% bootstrap percentile CIs
+
+  saved: results/bootstrap_LogisticRegression_summary.csv
+  saved: results/bootstrap_LogisticRegression_raw.csv
+
+===========================================================================
+HEADLINE  (LogisticRegression on BRFSS 2024, weighted, n_boot=1000, high_burden=Black_NH)
+===========================================================================
+Method                             TPR (95% CI)     OCFviol Linf
+Unmitigated    0.6035 [0.5960, 0.6108]       0.3379
+DP             0.4849 [0.4802, 0.4898]       0.2553
+OCF            0.6866 [0.6810, 0.6928]       0.0001
+EO             0.7030 [0.6543, 0.7857]       0.2672
+
+[theorem checks across bootstrap replicates]
+  Theorem 1 (DP < Unmit, TPR_Black_NH):  1000/1000 = 100.0%
+  Theorem 4 (OCF > DP,  TPR_Black_NH):  1000/1000 = 100.0%
+      Δ(OCF-DP): mean=+0.2017, 95% CI [+0.1953, +0.2085]
+      Δ(OCF-Unmit): mean=+0.0835, 95% CI [+0.0762, +0.0904]

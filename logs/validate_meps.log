@@ -1,0 +1,24 @@
+Downloading MEPS 2022 from https://meps.ahrq.gov/mepsweb/data_files/pufs/h243/h243v9.zip...
+Extracting data/meps_2022.zip...
+  in zip: h243.sas7bdat
+Loading data/h243.sas7bdat...
+  shape: (22431, 1420)
+  HIV-related columns: []
+
+*** WARNING: No HIV testing variable found in MEPS file. ***
+    Falling back to a blood-test uptake proxy.
+    Using proxy: ADBLDS42
+
+============================================================
+MEPS 2022 REPORT (n=1,654)
+============================================================
+Overall target rate: 0.6699
+          count    mean
+race_eth               
+Asian_NH     69  0.8261
+Black_NH    238  0.6765
+Hispanic    326  0.4969
+Other_NH     34  0.6471
+White_NH    987  0.7153
+
+✓ Saved: data/meps_2022_clean.parquet

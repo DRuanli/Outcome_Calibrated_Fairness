@@ -1,0 +1,57 @@
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
+WARNING:root:No module named 'inFairness': SenSeI and SenSR will be unavailable. To install, run:
+pip install 'aif360[inFairness]'
+[load] ./data/brfss_2024_clean.parquet
+  shape: (393676, 16)
+  high-burden group: Black_NH
+  train: 275573  test: 118103
+[train] XGBoost
+  AUROC (test): 0.6982
+
+[evaluate] ocf (ours)
+  OCF                            acc=0.6699 DPD=0.3118 OCFviol=0.0066
+  DP                             acc=0.6594 DPD=0.0328 OCFviol=0.2575
+  EO (HPS)                       acc=0.6175 DPD=0.1131 OCFviol=0.2704
+  Unmitigated                    acc=0.6673 DPD=0.1886 OCFviol=0.2899
+
+[evaluate] fairlearn
+  DP (ThresholdOpt)              acc=0.6743 DPD=0.0232 OCFviol=0.1463
+  EO (ThresholdOpt)              acc=0.6534 DPD=0.0444 OCFviol=0.0576
+  ExpGrad (DP)                   acc=0.6614 DPD=0.0219 OCFviol=0.1124
+
+[evaluate] aif360
+  Reweighing+LR                  acc=0.6748 DPD=0.1215 OCFviol=0.1441
+  EqOddsPostproc                 acc=0.6846 DPD=0.5581 OCFviol=0.4757
+
+[evaluate] aequitas (auditing our predictions)
+  OCF                            acc=0.6699 DPD=0.6375
+  DP                             acc=0.6594 DPD=0.7206
+  Unmitigated                    acc=0.6673 DPD=0.6295
+
+  saved: results/benchmark_XGBoost.csv
+
+==========================================================================================
+BENCHMARK SUMMARY  (XGBoost,  high-burden: Black_NH)
+==========================================================================================
+Library        Method                           Acc     DPD     EOD    OCFv   TPR_h
+ocf (ours)     OCF                           0.6699  0.3118  0.3245  0.0066  0.6873
+ocf (ours)     DP                            0.6594  0.0328  0.1084  0.2575  0.4784
+ocf (ours)     EO (HPS)                      0.6175  0.1131  0.0922  0.2704  0.7219
+ocf (ours)     Unmitigated                   0.6673  0.1886  0.1776  0.2899  0.6210
+fairlearn      DP (ThresholdOpt)             0.6743  0.0232  0.0788  0.1463  0.2928
+fairlearn      EO (ThresholdOpt)             0.6534  0.0444  0.0375  0.0576  0.2171
+fairlearn      ExpGrad (DP)                  0.6614  0.0219  0.0605  0.1124  0.2169
+aif360         Reweighing+LR                 0.6748  0.1215  0.0984  0.1441  0.3614
+aif360         EqOddsPostproc                0.6846  0.5581  1.0000  0.4757  1.0000
+aequitas       OCF                           0.6699  0.6375     nan     nan  0.6873
+aequitas       DP                            0.6594  0.7206     nan     nan  0.4784
+aequitas       Unmitigated                   0.6673  0.6295     nan     nan  0.6210
+
+[sanity] ocf.fit_dp should give same DPD as fairlearn ThresholdOpt(DP)
+  ocf DP DPD       = 0.032804
+  fairlearn DP DPD = 0.023158
+  agreement: ✓  (gap=0.0096)

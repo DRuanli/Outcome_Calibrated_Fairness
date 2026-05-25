@@ -1,0 +1,17 @@
+  trying URL: https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/DEMO_J.xpt
+    ✓ saved 3.4 MB
+  trying URL: https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/HIV_J.xpt
+    ✓ saved 0.1 MB
+  trying URL: https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/SXQ_J.xpt
+  trying URL: https://wwwn.cdc.gov/Nchs/Data/Nhanes/Public/2017/DataFiles/SXQ_J.XPT
+Traceback (most recent call last):
+  File "/Users/lenguyen/Documents/26-Research/unknown/ocf_final/scripts/validate_nhanes.py", line 224, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/Users/lenguyen/Documents/26-Research/unknown/ocf_final/scripts/validate_nhanes.py", line 213, in main
+    paths = download_nhanes(data_dir, cycle=args.cycle)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/lenguyen/Documents/26-Research/unknown/ocf_final/scripts/validate_nhanes.py", line 127, in download_nhanes
+    raise IOError(
+OSError: All URLs failed for NHANES 'sxq'. Last error: HTTP Error 404: Not Found
+Manual download: visit https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx?BeginYear=2017 and place SXQ_J.XPT at data/nhanes_17-18/SXQ_J.XPT.

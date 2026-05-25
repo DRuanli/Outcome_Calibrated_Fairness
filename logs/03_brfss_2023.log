@@ -1,0 +1,76 @@
+[load] data/brfss_2023_clean.parquet
+  shape: (382987, 19)
+  auto-detected high-burden group: 'Black_NH' (pi=0.5335)
+
+[setup]  protected=race_eth, groups=['AIAN_NH', 'Asian_NH', 'Black_NH', 'Hispanic', 'Other_NH', 'White_NH']
+    AIAN_NH        : n=  6,128  pi=0.4461
+    Asian_NH       : n= 10,796  pi=0.2458
+    Black_NH       : n= 29,338  pi=0.5335
+    Hispanic       : n= 38,467  pi=0.4605
+    Other_NH       : n= 14,221  pi=0.4365
+    White_NH       : n=284,037  pi=0.3117
+
+--- Auditing LogisticRegression ---
+  fold 0: AUROC=0.6969  Brier=0.2026
+  fold 1: AUROC=0.6968  Brier=0.2024
+  fold 2: AUROC=0.6988  Brier=0.2018
+  fold 3: AUROC=0.6919  Brier=0.2035
+  fold 4: AUROC=0.6929  Brier=0.2032
+
+--- Auditing RandomForest ---
+  fold 0: AUROC=0.7037  Brier=0.2011
+  fold 1: AUROC=0.7042  Brier=0.2008
+  fold 2: AUROC=0.7059  Brier=0.2003
+  fold 3: AUROC=0.6998  Brier=0.2017
+  fold 4: AUROC=0.7010  Brier=0.2014
+
+--- Auditing MLP ---
+  fold 0: AUROC=0.7055  Brier=0.2004
+  fold 1: AUROC=0.7049  Brier=0.2003
+  fold 2: AUROC=0.7079  Brier=0.1994
+  fold 3: AUROC=0.7012  Brier=0.2012
+  fold 4: AUROC=0.7013  Brier=0.2012
+
+--- Auditing XGBoost ---
+  fold 0: AUROC=0.7061  Brier=0.2002
+  fold 1: AUROC=0.7064  Brier=0.1999
+  fold 2: AUROC=0.7079  Brier=0.1994
+  fold 3: AUROC=0.7018  Brier=0.2011
+  fold 4: AUROC=0.7022  Brier=0.2009
+
+  saved: results_brfss_2023/all_metrics.csv
+  saved: results_brfss_2023/summary.csv
+  saved: results_brfss_2023/headline_table.csv
+
+==============================================================================
+HEADLINE: TPR change for 'Black_NH' (highest-burden group)
+==============================================================================
+             model      method  TPR_Black_NH_mean  d_TPR_Black_NH_vs_unmit  DPD_mean  OCF_violation_mean  accuracy_mean
+LogisticRegression Calibration             0.6894                   0.1069    0.5228              0.2920         0.6950
+LogisticRegression          DP             0.4743                  -0.1082    0.0006              0.2416         0.6644
+LogisticRegression          EO             0.6978                   0.1154    0.1029              0.2581         0.6226
+LogisticRegression         OCF             0.6691                   0.0866    0.2876              0.0005         0.6745
+LogisticRegression Unmitigated             0.5825                   0.0000    0.1879              0.3608         0.6719
+               MLP Calibration             0.6831                   0.0816    0.5185              0.2927         0.6984
+               MLP          DP             0.4767                  -0.1248    0.0007              0.2419         0.6689
+               MLP          EO             0.7002                   0.0987    0.1089              0.2465         0.6323
+               MLP         OCF             0.6758                   0.0743    0.2877              0.0002         0.6794
+               MLP Unmitigated             0.6015                   0.0000    0.1846              0.3302         0.6769
+      RandomForest Calibration             0.6687                   0.0822    0.5336              0.3072         0.6979
+      RandomForest          DP             0.4776                  -0.1089    0.0005              0.2415         0.6679
+      RandomForest          EO             0.7074                   0.1209    0.1073              0.2565         0.6264
+      RandomForest         OCF             0.6778                   0.0913    0.2870              0.0013         0.6778
+      RandomForest Unmitigated             0.5865                   0.0000    0.2192              0.3703         0.6750
+           XGBoost Calibration             0.7036                   0.0959    0.5371              0.3032         0.6987
+           XGBoost          DP             0.4767                  -0.1310    0.0004              0.2415         0.6690
+           XGBoost          EO             0.7082                   0.1004    0.1072              0.2559         0.6281
+           XGBoost         OCF             0.6746                   0.0668    0.2874              0.0006         0.6795
+           XGBoost Unmitigated             0.6077                   0.0000    0.1820              0.3251         0.6775
+
+==============================================================================
+THEOREM VERIFICATION ON BRFSS 2024 (cross-validation)
+==============================================================================
+  LogisticRegression  :  Thm1 DP-Harm: ✓ (ΔTPR=-0.1082)    Thm4 OCF>DP: ✓ (ΔTPR=+0.0866 > -0.1082)
+  MLP                 :  Thm1 DP-Harm: ✓ (ΔTPR=-0.1248)    Thm4 OCF>DP: ✓ (ΔTPR=+0.0743 > -0.1248)
+  RandomForest        :  Thm1 DP-Harm: ✓ (ΔTPR=-0.1089)    Thm4 OCF>DP: ✓ (ΔTPR=+0.0913 > -0.1089)
+  XGBoost             :  Thm1 DP-Harm: ✓ (ΔTPR=-0.1310)    Thm4 OCF>DP: ✓ (ΔTPR=+0.0668 > -0.1310)

@@ -1,0 +1,42 @@
+[load] ./data/brfss_2024_clean.parquet
+  shape: (393676, 16)
+
+--- LogisticRegression ---
+  AUROC: 0.6877
+  MLR (tol=0.00): 1/6 groups pass
+  MLR (tol=0.05): 3/6 groups pass
+  MLR (tol=0.10): 4/6 groups pass
+
+--- RandomForest ---
+  AUROC: 0.6954
+  MLR (tol=0.00): 1/6 groups pass
+  MLR (tol=0.05): 2/6 groups pass
+  MLR (tol=0.10): 3/6 groups pass
+
+--- MLP ---
+  AUROC: 0.6963
+  MLR (tol=0.00): 2/6 groups pass
+  MLR (tol=0.05): 3/6 groups pass
+  MLR (tol=0.10): 4/6 groups pass
+
+--- XGBoost ---
+  AUROC: 0.6973
+  MLR (tol=0.00): 2/6 groups pass
+  MLR (tol=0.05): 4/6 groups pass
+  MLR (tol=0.10): 4/6 groups pass
+
+  saved: results/mlr_verification.csv
+
+============================================================
+MLR Verification Summary (% of model×group pairs holding)
+============================================================
+tolerance            0.00   0.05   0.10
+model                                  
+LogisticRegression  0.167  0.500  0.667
+MLP                 0.333  0.500  0.667
+RandomForest        0.167  0.333  0.500
+XGBoost             0.333  0.667  0.667
+
+Interpretation: each cell shows the fraction of race/ethnicity
+groups where MLR holds with the listed tolerance. Values near
+1.0 confirm A2' is empirically satisfied (Section 3.7 of paper).

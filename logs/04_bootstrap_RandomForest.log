@@ -1,0 +1,46 @@
+[load] ./data/brfss_2024_clean.parquet
+  shape: (393676, 16)
+  weights: uniform (column _LLCPWT not found)
+
+[train] RandomForest via 5-fold CV
+  full-data AUROC: 0.6953
+
+[point] weighted point estimates (full data)
+  target aggregate rate (weighted mean(y)): 0.3649
+  [Unmitigated   ] acc=0.6650 DPD=0.2244 OCFviol(Linf)=0.3473 TPR_Black_NH=0.6079
+  [DP            ] acc=0.6564 DPD=0.0003 OCFviol(Linf)=0.2553 TPR_Black_NH=0.4895
+  [OCF           ] acc=0.6675 DPD=0.3175 OCFviol(Linf)=0.0000 TPR_Black_NH=0.6926
+  [EO            ] acc=0.6106 DPD=0.1149 OCFviol(Linf)=0.2830 TPR_Black_NH=0.7331
+
+[bootstrap] 1000 replicates, stratified by region
+  replicate 1/1000
+  replicate 100/1000
+  replicate 200/1000
+  replicate 300/1000
+  replicate 400/1000
+  replicate 500/1000
+  replicate 600/1000
+  replicate 700/1000
+  replicate 800/1000
+  replicate 900/1000
+  replicate 1000/1000
+
+[summary] 95% bootstrap percentile CIs
+
+  saved: results/bootstrap_RandomForest_summary.csv
+  saved: results/bootstrap_RandomForest_raw.csv
+
+===========================================================================
+HEADLINE  (RandomForest on BRFSS 2024, weighted, n_boot=1000, high_burden=Black_NH)
+===========================================================================
+Method                             TPR (95% CI)     OCFviol Linf
+Unmitigated    0.6079 [0.6007, 0.6149]       0.3473
+DP             0.4895 [0.4852, 0.4946]       0.2553
+OCF            0.6926 [0.6867, 0.6988]       0.0000
+EO             0.7331 [0.6528, 0.7959]       0.2830
+
+[theorem checks across bootstrap replicates]
+  Theorem 1 (DP < Unmit, TPR_Black_NH):  1000/1000 = 100.0%
+  Theorem 4 (OCF > DP,  TPR_Black_NH):  1000/1000 = 100.0%
+      Δ(OCF-DP): mean=+0.2029, 95% CI [+0.1961, +0.2096]
+      Δ(OCF-Unmit): mean=+0.0851, 95% CI [+0.0788, +0.0914]

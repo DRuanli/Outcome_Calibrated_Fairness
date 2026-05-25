@@ -1,0 +1,17 @@
+[load] ./data/brfss_2024_clean.parquet
+  shape: (393676, 16)
+[train] MLP
+  AUROC: 0.6963
+  high-burden group: Black_NH (pi=0.5623)
+
+[sweep] c in [0.5, 1.5] with 21 points
+  saved: results/sensitivity_c_MLP.csv
+
+[summary]  high-burden = Black_NH, AUROC = 0.6963
+     c   accuracy   TPR_Black_NH   rho_Black_NH        DPD   OCF_viol
+ 0.500     0.6780         0.3861         0.2812     0.1587     0.0001
+ 1.000     0.6683         0.6922         0.5623     0.3175     0.0001
+ 1.500     0.6217         0.9149         0.8435     0.4756     0.0009
+
+  Across all c in sweep, TPR_Black_NH stays within 5% of its c=1.0 value in 57% of evaluated c values.
+  (This is the 'OCF is robust to choice of c' statement for the paper.)

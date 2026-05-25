@@ -1,0 +1,88 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ocf"
+version = "1.0.0"
+description = "Outcome-Calibrated Fairness for binary classification"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "[Author Names]", email = "[email]" },
+]
+keywords = [
+    "algorithmic fairness",
+    "outcome-calibrated fairness",
+    "post-processing",
+    "demographic parity",
+    "equalized odds",
+    "health equity",
+    "HIV screening",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Healthcare Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scikit-learn>=1.3",
+    "scipy>=1.10",
+]
+
+[project.optional-dependencies]
+# For replicating BRFSS data download + parquet I/O
+data = [
+    "pyarrow>=14.0",
+]
+# For training XGBoost baseline (one of four ML classifiers)
+xgboost = [
+    "xgboost>=2.0",
+]
+# For the third-party-library benchmark script (scripts/06_benchmark_libraries.py)
+benchmark = [
+    "fairlearn>=0.10",
+    "aif360>=0.6",
+    "aequitas>=1.0",
+]
+# Running unit tests
+test = [
+    "pytest>=8.0",
+    "pytest-cov>=4.0",
+]
+# Everything (recommended for development)
+all = [
+    "ocf[data,xgboost,benchmark,test]",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/[USERNAME]/ocf"
+"Bug Tracker" = "https://github.com/[USERNAME]/ocf/issues"
+"Paper" = "https://[journal-url-when-published]"
+
+[tool.setuptools]
+packages = ["ocf"]
+
+[tool.setuptools.package-data]
+ocf = ["py.typed"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --strict-markers"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]

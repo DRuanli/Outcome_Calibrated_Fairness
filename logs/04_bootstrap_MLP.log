@@ -1,0 +1,46 @@
+[load] ./data/brfss_2024_clean.parquet
+  shape: (393676, 16)
+  weights: uniform (column _LLCPWT not found)
+
+[train] MLP via 5-fold CV
+  full-data AUROC: 0.6963
+
+[point] weighted point estimates (full data)
+  target aggregate rate (weighted mean(y)): 0.3649
+  [Unmitigated   ] acc=0.6661 DPD=0.1853 OCFviol(Linf)=0.2865 TPR_Black_NH=0.6304
+  [DP            ] acc=0.6572 DPD=0.0002 OCFviol(Linf)=0.2553 TPR_Black_NH=0.4866
+  [OCF           ] acc=0.6683 DPD=0.3175 OCFviol(Linf)=0.0001 TPR_Black_NH=0.6922
+  [EO            ] acc=0.5905 DPD=0.1060 OCFviol(Linf)=0.3301 TPR_Black_NH=0.7773
+
+[bootstrap] 1000 replicates, stratified by region
+  replicate 1/1000
+  replicate 100/1000
+  replicate 200/1000
+  replicate 300/1000
+  replicate 400/1000
+  replicate 500/1000
+  replicate 600/1000
+  replicate 700/1000
+  replicate 800/1000
+  replicate 900/1000
+  replicate 1000/1000
+
+[summary] 95% bootstrap percentile CIs
+
+  saved: results/bootstrap_MLP_summary.csv
+  saved: results/bootstrap_MLP_raw.csv
+
+===========================================================================
+HEADLINE  (MLP on BRFSS 2024, weighted, n_boot=1000, high_burden=Black_NH)
+===========================================================================
+Method                             TPR (95% CI)     OCFviol Linf
+Unmitigated    0.6304 [0.6231, 0.6370]       0.2865
+DP             0.4866 [0.4822, 0.4915]       0.2553
+OCF            0.6922 [0.6868, 0.6983]       0.0001
+EO             0.7773 [0.6353, 0.7885]       0.3301
+
+[theorem checks across bootstrap replicates]
+  Theorem 1 (DP < Unmit, TPR_Black_NH):  1000/1000 = 100.0%
+  Theorem 4 (OCF > DP,  TPR_Black_NH):  1000/1000 = 100.0%
+      Δ(OCF-DP): mean=+0.2057, 95% CI [+0.1996, +0.2120]
+      Δ(OCF-Unmit): mean=+0.0624, 95% CI [+0.0564, +0.0681]
