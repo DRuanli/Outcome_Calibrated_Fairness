@@ -7,7 +7,7 @@
 Reference implementation of the algorithms, metrics, and experiments from:
 
 > **Outcome-Calibrated Fairness for HIV Risk Prediction in High-Disparity Populations**
-> [Author Names], 2026. Submitted to [JAMIA / Journal of Biomedical Informatics].
+> Dang Nguyen Le, Minh-Anh Tran Nguyen, Yamin Thiri Wai, Duc-Nhan Tran, 2026. Submitted to Journal of Biomedical Informatics.
 
 The package implements **Algorithms 1–4** of the paper:
 
@@ -46,21 +46,6 @@ y_hat = predict_ocf(scores_test, a_test, result)
 viol = ocf_violation(y_hat, y_test, a_test)
 print(f"OCF violation = {viol:.6f}")  # should be ~0 after fit
 ```
-
-For multi-method comparison:
-
-```python
-out = evaluate_all(scores, y, a, seed=0)
-for row in out["rows"]:
-    print(f"{row['method']:<14} acc={row['accuracy']:.4f} "
-          f"OCF_viol={row['OCF_violation']:.4f}")
-# Unmitigated   acc=0.937 OCF_viol=0.054
-# DP            acc=0.844 OCF_viol=0.283
-# EO            acc=0.929 OCF_viol=0.051
-# Calibration   acc=0.943 OCF_viol=0.015
-# OCF           acc=0.941 OCF_viol=0.000
-```
-
 ---
 
 ## Installation
@@ -203,61 +188,18 @@ ocf/
 
 ---
 
-## What's new in v1.0.0
-
-1. **Bootstrap c-bug fix.** Previous `04_bootstrap_audit.py` computed
-   the OCF multiplier *c* using an unweighted mean of per-group base
-   rates instead of the size-weighted mean, yielding `c ≈ 0.857`
-   instead of the correct `c = 1.0`. The new bootstrap script uses
-   `ocf.fit_ocf` directly. Headline numbers shift: Δ(OCF − DP) on
-   high-burden TPR increases from ~12.9pp to ~20pp; Δ(OCF − Unmit)
-   moves from −1.6pp to **+6.7pp positive**. See `CHANGELOG.md`.
-
-2. **Proper Hardt-Price-Srebro EO.** The previous EO heuristic
-   ("threshold matching median TPR/FPR") is replaced by the full
-   LP-based HPS algorithm with randomized thresholds and exact equal-
-   odds in expectation. Run-time is < 1 s for BRFSS-scale data.
-
-3. **Standardized OCF violation metric.** Definition 3.6 introduces a
-   single $L^\infty$ form normalized by max base rate. The legacy
-   ratio-spread metric is retained as
-   `ocf_violation_ratio_spread` for diagnostic continuity.
-
-4. **Strengthened theoretical assumption.** A2 (within-group AUROC >
-   0.5) retained as the audit condition; A2′ (MLR within group) added
-   as the proof condition for Theorems 1, 3, 4. The rigorous proof of
-   Theorem 3 is provided in `docs/SECTION_3_REVISIONS.md`.
-
-5. **Benchmark integration.** `scripts/06_benchmark_libraries.py`
-   compares OCF end-to-end against:
-   - Fairlearn `ThresholdOptimizer` (DP + EO)
-   - Fairlearn `ExponentiatedGradient` (DP)
-   - AIF360 `Reweighing` + LR
-   - AIF360 `EqOddsPostprocessing`
-   - Aequitas audit on our predictions
-
-6. **Sensitivity analysis.** New `ocf.sensitivity` module + script for
-   sweeping the OCF screening multiplier *c* across $[0.5, 1.5]$,
-   producing the appendix figure.
-
-7. **Empirical MLR verification.** `scripts/07_verify_mlr.py` confirms
-   A2′ holds for all 4 ML classifiers (LogReg, RF, MLP, XGBoost) on
-   BRFSS 2024.
-
----
-
 ## Citation
 
 If you use this code, please cite:
 
 ```bibtex
-@article{ocf2026,
-  author  = {[Authors]},
-  title   = {Outcome-Calibrated Fairness for HIV Risk Prediction
-             in High-Disparity Populations},
-  journal = {[JAMIA / JBI / TBD]},
-  year    = {2026},
-  doi     = {[TBD]}
+@unpublished{le2026ocf,
+  author = {Le, Nguyen and Tran, M. A. Nguyen and Wai, Yamin Thiri
+            and Tran, Duc-Nhan and Duong, Huu-Phuoc},
+  title  = {Outcome-Calibrated Fairness: A Base-Rate-Aware Post-Processing
+            Criterion for {HIV} Risk Prediction under Demographic Disparity},
+  note   = {Preprint submitted to Journal of Biomedical Informatics},
+  year   = {2026}
 }
 ```
 
@@ -271,4 +213,4 @@ MIT. See `LICENSE`.
 
 Please open a GitHub issue with a minimal reproducible example and the
 expected vs. observed behavior.
-# of
+# OFC
